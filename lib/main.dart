@@ -4,6 +4,7 @@ import 'package:state_secret/screens/missions.dart';
 import 'package:state_secret/screens/pay.dart';
 import 'package:state_secret/screens/profile.dart';
 import 'package:state_secret/screens/savings.dart';
+import 'package:state_secret/screens/test.dart';
 // import 'dashboard.dart';
 // import 'pay.dart';
 // import 'missions.dart';
@@ -18,12 +19,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Routing Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: HomeScreen(),
       routes: {
+        '/test': (context) => TestScreen(),
         '/dashboard': (context) => DashboardScreen(),
         '/pay': (context) => PayScreen(),
         '/missions': (context) => MissionsScreen(),
@@ -45,6 +48,12 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/test');
+              },
+              child: Text('Go to test'),
+            ),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/dashboard');
