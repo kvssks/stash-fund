@@ -15,7 +15,7 @@ class PayScreen extends StatelessWidget {
           children: <Widget>[
             ElevatedButton(
               onPressed: () {
-                // Handle pay action
+                Navigator.pushNamed(context, '/qr');
               },
               child: Text('Pay'),
             ),

@@ -4,6 +4,7 @@ import 'package:state_secret/screens/missions.dart';
 import 'package:state_secret/screens/pay.dart';
 import 'package:state_secret/screens/profile.dart';
 import 'package:state_secret/screens/savings.dart';
+import 'package:state_secret/widgets/qr_scanner.dart';
 // import 'dashboard.dart';
 // import 'pay.dart';
 // import 'missions.dart';
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
         '/missions': (context) => MissionsScreen(),
         '/savings': (context) => SavingsScreen(),
         '/profile': (context) => ProfileScreen(),
+        '/qr': (context) => QRScanner()
       },
     );
   }
