@@ -4,10 +4,16 @@ PODS:
   - qr_code_scanner (0.2.0):
     - Flutter
     - MTBBarcodeScanner
+  - upi_pay (1.0.0):
+    - Flutter
+  - url_launcher_ios (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - qr_code_scanner (from `.symlinks/plugins/qr_code_scanner/ios`)
+  - upi_pay (from `.symlinks/plugins/upi_pay/ios`)
+  - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
 
 SPEC REPOS:
   trunk:
@@ -18,11 +24,17 @@ EXTERNAL SOURCES:
     :path: Flutter
   qr_code_scanner:
     :path: ".symlinks/plugins/qr_code_scanner/ios"
+  upi_pay:
+    :path: ".symlinks/plugins/upi_pay/ios"
+  url_launcher_ios:
+    :path: ".symlinks/plugins/url_launcher_ios/ios"
 
 SPEC CHECKSUMS:
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
   qr_code_scanner: bb67d64904c3b9658ada8c402e8b4d406d5d796e
+  upi_pay: a7d6fab40381ea9b2f9f8d56da43829926ce1ff0
+  url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
 
 PODFILE CHECKSUM: 819463e6a0290f5a72f145ba7cde16e8b6ef0796
 
