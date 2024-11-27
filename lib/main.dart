@@ -5,6 +5,7 @@ import 'package:state_secret/screens/pay.dart';
 import 'package:state_secret/screens/profile.dart';
 import 'package:state_secret/screens/savings.dart';
 import 'package:state_secret/screens/test.dart';
+import 'package:state_secret/screens/form.dart';
 // import 'dashboard.dart';
 // import 'pay.dart';
 // import 'missions.dart';
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
       ),
       home: HomeScreen(),
       routes: {
+        '/form': (context) => BudgetForm(),
         '/test': (context) => TestScreen(),
         '/dashboard': (context) => DashboardScreen(),
         '/pay': (context) => PayScreen(),
@@ -48,6 +50,12 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/form');
+              },
+              child: Text('Go to form'),
+            ),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/test');
