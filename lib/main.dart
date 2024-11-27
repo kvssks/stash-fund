@@ -3,6 +3,7 @@ import 'package:state_secret/screens/dashboard.dart';
 import 'package:state_secret/screens/missions.dart';
 import 'package:state_secret/screens/pay.dart';
 import 'package:state_secret/screens/profile.dart';
+import 'package:state_secret/screens/qr.dart';
 import 'package:state_secret/screens/savings.dart';
 // import 'dashboard.dart';
 // import 'pay.dart';
@@ -25,10 +26,12 @@ class MyApp extends StatelessWidget {
       home: HomeScreen(),
       routes: {
         '/dashboard': (context) => DashboardScreen(),
-        '/pay': (context) => PayScreen(),
+        // '/pay': (context) => PayScreen(),
         '/missions': (context) => MissionsScreen(),
         '/savings': (context) => SavingsScreen(),
         '/profile': (context) => ProfileScreen(),
+        '/pay': (context) => QRViewExample(),
+
       },
     );
   }
