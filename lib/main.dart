@@ -4,9 +4,11 @@ import 'package:state_secret/screens/missions.dart';
 import 'package:state_secret/screens/pay.dart';
 import 'package:state_secret/screens/profile.dart';
 import 'package:state_secret/screens/savings.dart';
+import 'package:state_secret/screens/savings_chart.dart';
 import 'package:state_secret/screens/test.dart';
 import 'package:state_secret/screens/form.dart';
 import 'package:state_secret/screens/categories.dart';
+
 // import 'dashboard.dart';
 // import 'pay.dart';
 // import 'missions.dart';
@@ -28,6 +30,7 @@ class MyApp extends StatelessWidget {
       ),
       home: HomeScreen(),
       routes: {
+        '/savings_chart':(context) => SavingsChart(),
         '/categories': (context) => CategoriesPage(),
         '/form': (context) => BudgetForm(),
         '/test': (context) => TestScreen(),
@@ -52,6 +55,12 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/savings_chart');
+              },
+              child: Text('Go to savings chart'),
+            ),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/categories');
