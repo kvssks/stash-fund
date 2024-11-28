@@ -4,10 +4,10 @@ const Goal = require('../models/goal');
 // Add a new goal
 const addGoal = async (req, res) => {
   try {
-    const { type, amount } = req.body;
-
+    const { type, amount ,userid} = req.body;
+  
     // Check if the goal already exists for the user
-    const existingGoal = await Goal.findOne({ type, userId: req.user.id });
+    const existingGoal = await Goal.findOne({ type, userId: userid });
     if (existingGoal) {
       return res.status(400).json({ message: 'Goal already exists for this category.' });
     }
@@ -15,7 +15,7 @@ const addGoal = async (req, res) => {
     const goal = new Goal({
       type,
       amount,
-      userId: req.user.id,
+      userId: userid,
     });
 
     await goal.save();
@@ -60,18 +60,20 @@ const updateGoal = async (req, res) => {
 // Delete a goal
 const deleteGoal = async (req, res) => {
   try {
-    const { id } = req.params;
-
-    const goal = await Goal.findOneAndDelete({ _id: id, userId: req.user.id });
+    const { userid, type } = req.body; // Extract userId and type from the request body
+    console.log(userid, type);
+    // Find and delete the goal based on userId and type
+    const goal = await Goal.findOneAndDelete({ userId : userid, type });
 
     if (!goal) {
-      return res.status(404).json({ message: 'Goal not found' });
+      return res.status(404).json({ message: 'Goal not found for the given user and category.' });
     }
 
-    res.status(200).json({ message: 'Goal deleted successfully' });
+    res.status(200).json({ message: 'Goal deleted successfully', deletedGoal: goal });
   } catch (error) {
     res.status(500).json({ message: 'Error deleting goal', error: error.message });
   }
 };
+
 
 module.exports = { addGoal, getGoals, updateGoal, deleteGoal };
