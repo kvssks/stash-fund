@@ -1,33 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:gradient_circular_progress_indicator/gradient_circular_progress_indicator.dart';
 
-class SavingsChart extends StatelessWidget {
+class SavingsChart extends StatefulWidget {
+  @override
+  _SavingsChartState createState() => _SavingsChartState();
+}
+
+class _SavingsChartState extends State<SavingsChart>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 1), // Total animation duration
+    )..forward(); // Start the animation
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Savings Progress")),
       body: Center(
-        child: ConcentricGradientProgress(),
+        child: ConcentricGradientProgress(animationController: _animationController),
       ),
     );
   }
 }
 
-class ConcentricGradientProgress extends StatefulWidget {
-  @override
-  _ConcentricGradientProgressState createState() =>
-      _ConcentricGradientProgressState();
-}
+class ConcentricGradientProgress extends StatelessWidget {
+  final AnimationController animationController;
 
-class _ConcentricGradientProgressState extends State<ConcentricGradientProgress> {
-  String _hoverText = ''; // Variable to store the text that will be displayed on hover
+  ConcentricGradientProgress({required this.animationController});
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       alignment: Alignment.center,
       children: [
-        // Create each concentric circle using the reusable function wrapped in MouseRegion
         _buildConcentricCircle(
           progress: 0.25,
           gradient: LinearGradient(
@@ -37,7 +55,6 @@ class _ConcentricGradientProgressState extends State<ConcentricGradientProgress>
           ),
           size: 300.0,
           stroke: 12.0,
-          label: '25% Progress - Task 1', // Label for the circle
         ),
         _buildConcentricCircle(
           progress: 0.5,
@@ -48,7 +65,6 @@ class _ConcentricGradientProgressState extends State<ConcentricGradientProgress>
           ),
           size: 250.0,
           stroke: 12.0,
-          label: '50% Progress - Task 2', // Label for the circle
         ),
         _buildConcentricCircle(
           progress: 0.75,
@@ -59,7 +75,6 @@ class _ConcentricGradientProgressState extends State<ConcentricGradientProgress>
           ),
           size: 200.0,
           stroke: 12.0,
-          label: '75% Progress - Task 3', // Label for the circle
         ),
         _buildConcentricCircle(
           progress: 0.9,
@@ -70,55 +85,30 @@ class _ConcentricGradientProgressState extends State<ConcentricGradientProgress>
           ),
           size: 150.0,
           stroke: 12.0,
-          label: '90% Progress - Task 4', // Label for the circle
-        ),
-        // Display the hover text when the mouse is over any of the circles
-        Positioned(
-          bottom: 50,
-          child: AnimatedOpacity(
-            opacity: _hoverText.isEmpty ? 0.0 : 1.0,
-            duration: Duration(milliseconds: 300),
-            child: Text(
-              _hoverText,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-                backgroundColor: Colors.white.withOpacity(0.7),
-              ),
-            ),
-          ),
         ),
       ],
     );
   }
 
-  // Reusable function to create a concentric circle with custom parameters
   Widget _buildConcentricCircle({
     required double progress,
     required LinearGradient gradient,
     required double size,
     required double stroke,
-    required String label,
   }) {
-    return MouseRegion(
-      onEnter: (_) {
-        setState(() {
-          _hoverText = label; // Set hover text when entering the region
-        });
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0.0, end: progress), // Start from 0 and animate to `progress`
+      duration: Duration(seconds: 1),
+      builder: (context, animatedProgress, _) {
+        return GradientCircularProgressIndicator(
+          progress: animatedProgress, // Use the animated progress value
+          gradient: gradient,
+          backgroundColor: Colors.grey,
+          size: size,
+          stroke: stroke,
+        );
       },
-      onExit: (_) {
-        setState(() {
-          _hoverText = ''; // Clear hover text when exiting the region
-        });
-      },
-      child: GradientCircularProgressIndicator(
-        progress: progress, // Progress value for each circle
-        gradient: gradient, // Gradient for each circle
-        backgroundColor: Colors.grey, // Background color
-        size: size, // Size of the circular progress indicator
-        stroke: stroke, // Stroke width for the progress arc
-      ),
+      curve: Curves.easeInOut, // Smooth animation curve
     );
   }
 }
