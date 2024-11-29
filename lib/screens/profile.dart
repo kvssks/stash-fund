@@ -18,7 +18,7 @@ class ProfileScreen extends StatelessWidget {
             child: CircleAvatar(
               radius: 60,
               backgroundImage: AssetImage(
-                  '/Users/dhruvnuti/Documents/squad_league/suqad-league/lib/components/logo.png'),
+                  'assets/images/logo.png'), 
             ),
           ),
           const SizedBox(height: 20),
