@@ -5,6 +5,7 @@ import 'package:state_secret/screens/pay.dart';
 import 'package:state_secret/screens/profile.dart';
 import 'package:state_secret/screens/test.dart';
 import 'package:state_secret/screens/needsandwants.dart';
+import 'package:state_secret/screens/savings.dart';
 
 
 
@@ -14,6 +15,69 @@ import 'package:state_secret/components/navbar.dart';
 void main() {
   runApp(MyApp());
 }
+class SavingsChartCard extends StatefulWidget {
+  @override
+  _SavingsChartCardState createState() => _SavingsChartCardState();
+}
+
+class _SavingsChartCardState extends State<SavingsChartCard> {
+  List<CircleConfig> _buildCircles() {
+    return [
+      CircleConfig(
+        progress: 0.8,
+        gradient: LinearGradient(colors: [Colors.red, Colors.orange]),
+        size: 150,
+        stroke: 8,
+      ),
+      CircleConfig(
+        progress: 0.7,
+        gradient: LinearGradient(colors: [Colors.purple, Colors.pink]),
+        size: 130,
+        stroke: 8,
+      ),
+      CircleConfig(
+        progress: 0.6,
+        gradient: LinearGradient(colors: [Colors.green, Colors.blue]),
+        size: 110,
+        stroke: 8,
+      ),
+    ];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 200,
+      width: double.infinity,
+      child: GestureDetector(
+        onTap: () {
+          Navigator.pushNamed(context, '/savings');
+        },
+        child: Card(
+          color: Colors.white,
+          child: Stack(
+            alignment: Alignment.center, // Aligns text to the center
+            children: [
+              Padding(
+                padding: EdgeInsets.all(18),
+                child: SavingsChart(circles: _buildCircles()),
+              ),
+              Text(
+                "Savings",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 
 class MyApp extends StatelessWidget {
   @override
@@ -22,6 +86,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: HomeScreen(),
       routes:{
+        '/savings': (context) => SavingsPage(),
         '/needsandwants': (context) => EmptyPage(),
         '/home': (context) => HomeScreen(),
         '/categories': (context) => CategoriesPage(),
@@ -29,6 +94,7 @@ class MyApp extends StatelessWidget {
         '/test': (context) => TestScreen(),
         '/pay': (context) => PayScreen(),
         '/profile': (context) => ProfileScreen(),
+
       },
     );
   }
@@ -62,7 +128,7 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
             SizedBox(height: 20),
-            SavingsChart(circles: _buildCircles()),
+            SavingsChartCard(),
             SizedBox(height: 24),
             _buildPendingPayments(),
           ],
@@ -99,29 +165,6 @@ class HomeScreen extends StatelessWidget {
     ),
   );
 }
-
-  List<CircleConfig> _buildCircles() {
-    return [
-      CircleConfig(
-        progress: 0.8,
-        gradient: LinearGradient(colors: [Colors.red, Colors.orange]),
-        size: 150,
-        stroke: 8,
-      ),
-      CircleConfig(
-        progress: 0.7,
-        gradient: LinearGradient(colors: [Colors.purple, Colors.pink]),
-        size: 130,
-        stroke: 8,
-      ),
-      CircleConfig(
-        progress: 0.6,
-        gradient: LinearGradient(colors: [Colors.green, Colors.blue]),
-        size: 110,
-        stroke: 8,
-      ),
-    ];
-  }
 
   Widget _buildPendingPayments() {
     return Card(
