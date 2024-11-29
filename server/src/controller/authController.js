@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const mongoose = require("mongoose");
 
 // Signup logic
 exports.signup = async (req, res) => {
@@ -24,6 +25,27 @@ exports.signup = async (req, res) => {
   }
 };
 
+exports.findUser = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    // Convert the string userId to ObjectId
+    const userIdObjectId = new mongoose.Types.ObjectId(userId);
+
+    // Find the user in the database
+    const user = await User.findOne({ _id: userIdObjectId });
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    // Respond with the user's name
+    res.status(200).json({ success: true, name: user.name });
+  } catch (error) {
+    // Handle any errors (e.g., invalid ObjectId format or database issues)
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
 // Login logic
 exports.login = async (req, res) => {
   const { email, password } = req.body;

@@ -22,8 +22,8 @@ app.use(cors()); // Enable Cross-Origin Resource Sharing
 // app.use('/api/users', userRoutes); // User authentication routes
 app.use('/api/goals', goalRoutes); // Financial goal routes
 app.use("/api/auth", authRoutes);
-app.use('/personal-vault', personalVaultRoutes);
-app.use('/group-vault', groupVaultRoutes);
+app.use('/api/personalVault', personalVaultRoutes);
+app.use('/api/groupVault', groupVaultRoutes);
 // Database Connection
 mongoose
   .connect(process.env.MONGO_URI)
