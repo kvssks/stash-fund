@@ -28,7 +28,8 @@ const addGoal = async (req, res) => {
 // Get all goals for the user
 const getGoals = async (req, res) => {
   try {
-    const goals = await Goal.find({ userId: req.user.id });
+    console.log(req.params);
+    const goals = await Goal.find({ userId: req.params.id });
     res.status(200).json(goals);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching goals', error: error.message });
@@ -38,11 +39,12 @@ const getGoals = async (req, res) => {
 // Update a goal's amount
 const updateGoal = async (req, res) => {
   try {
-    const { id } = req.params;
-    const { amount } = req.body;
+    // const { id } = req.params;
+    // const { amo } = req.body;
+    const { type, amount ,userid} = req.body;
 
     const goal = await Goal.findOneAndUpdate(
-      { _id: id, userId: req.user.id },
+      { type: type, userId: userid },
       { amount },
       { new: true } // Return the updated document
     );
@@ -63,7 +65,7 @@ const deleteGoal = async (req, res) => {
     const { userid, type } = req.body; // Extract userId and type from the request body
     console.log(userid, type);
     // Find and delete the goal based on userId and type
-    const goal = await Goal.findOneAndDelete({ userId : userid, type });
+    const goal = await Goal.findOneAndDelete({ userId : userid, type: type });
 
     if (!goal) {
       return res.status(404).json({ message: 'Goal not found for the given user and category.' });
