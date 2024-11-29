@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:state_secret/components/navbar.dart';
+
 
 class ProfileScreen extends StatelessWidget {
   @override
@@ -22,6 +24,10 @@ class ProfileScreen extends StatelessWidget {
             Text('Total Savings: \$450'),
           ],
         ),
+      ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        parentContext: context,
+        currentIndex: 3, // 0 for Home
       ),
     );
   }

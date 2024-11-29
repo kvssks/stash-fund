@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:state_secret/components/navbar.dart';
 
 class TestScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
         title: Text('Group Name'),
         centerTitle: true,
       ),
@@ -111,6 +106,10 @@ class TestScreen extends StatelessWidget {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        parentContext: context,
+        currentIndex: 1, // 0 for Home
       ),
     );
   }
