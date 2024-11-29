@@ -7,7 +7,7 @@ const cors = require('cors');
 // Import Routes
 // const userRoutes = require('./src/routes/userRoutes');
 const goalRoutes = require('./src/routes/goalRoutes');
-
+const authRoutes = require('./src/routes/authRoutes');
 // Initialize Express App
 const app = express();
 
@@ -19,7 +19,7 @@ app.use(cors()); // Enable Cross-Origin Resource Sharing
 // Routes
 // app.use('/api/users', userRoutes); // User authentication routes
 app.use('/api/goals', goalRoutes); // Financial goal routes
-
+app.use("/api/auth", authRoutes);
 // Database Connection
 mongoose
   .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
