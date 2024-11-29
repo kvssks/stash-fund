@@ -6,8 +6,6 @@ import 'package:state_secret/screens/profile.dart';
 import 'package:state_secret/screens/test.dart';
 import 'package:state_secret/screens/needsandwants.dart';
 
-
-
 import 'package:state_secret/components/savings_chart.dart';
 import 'package:state_secret/components/navbar.dart';
 
@@ -21,18 +19,49 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: HomeScreen(),
-      routes:{
-        '/needsandwants': (context) => EmptyPage(),
-        '/home': (context) => HomeScreen(),
-        '/categories': (context) => CategoriesPage(),
-        '/form': (context) => BudgetForm(),
-        '/test': (context) => TestScreen(),
-        '/pay': (context) => PayScreen(),
-        '/profile': (context) => ProfileScreen(),
+      onGenerateRoute: (settings) {
+        switch (settings.name) {
+          case '/needsandwants':
+            return _createRoute(EmptyPage());
+          case '/home':
+            return _createRoute(HomeScreen());
+          case '/categories':
+            return _createRoute(CategoriesPage());
+          case '/form':
+            return _createRoute(BudgetForm());
+          case '/test':
+            return _createRoute(TestScreen());
+          case '/pay':
+            return _createRoute(PayScreen());
+          case '/profile':
+            return _createRoute(ProfileScreen());
+          default:
+            return null;
+        }
+      },
+    );
+  }
+
+  Route _createRoute(Widget page) {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => page,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(1.0, 0.0); // Start from right to left
+        const end = Offset.zero;
+        const curve = Curves.easeInOut;
+
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        var offsetAnimation = animation.drive(tween);
+
+        return SlideTransition(
+          position: offsetAnimation,
+          child: child,
+        );
       },
     );
   }
 }
+
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -48,13 +77,13 @@ class HomeScreen extends StatelessWidget {
               children: [
                 SizedBox(height: 16),
                 Padding(
-                  padding: const EdgeInsets.only(top: 65.0,right:30), // Adjust the top padding as needed
+                  padding: const EdgeInsets.only(top: 65.0, right: 30), // Adjust the top padding as needed
                   child: _buildScanToPayButton(context),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 65.0), // Adjust the top padding as needed
                   child: Image.asset(
-                    '/Users/dhruvnuti/Documents/squad_league/suqad-league/lib/components/logo.png',
+                    'assets/images/logo.png',
                     width: 50, // Adjust the width as needed
                     height: 50, // Adjust the height as needed
                   ),
@@ -75,30 +104,69 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildScanToPayButton(BuildContext context) {
-  return SizedBox(
-    width: 270, // Makes the button take the full width of its parent
-    child: ElevatedButton.icon(
-      onPressed: () {
-        Navigator.pushNamed(context, '/pay');
-      },
-      icon: Icon(Icons.qr_code_scanner, color: Colors.green),
-      label: Text(
-        'Scan to pay',
-        style: TextStyle(color: Colors.green),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.lightGreen[100],
-        elevation: 0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        padding: EdgeInsets.symmetric(vertical: 12,horizontal: 12), // Adjust padding
-        alignment: Alignment.center, // Center the content
-      ),
-    ),
+// Route _createRoute(Widget page) {
+//   return PageRouteBuilder(
+//     pageBuilder: (context, animation, secondaryAnimation) => page,
+//     transitionsBuilder: (context, animation, secondaryAnimation, child) {
+//       const begin = Offset(1.0, 0.0); // Start from right to left
+//       const end = Offset.zero;
+//       const curve = Curves.easeInOut;
+
+//       var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+//       var offsetAnimation = animation.drive(tween);
+
+//       return SlideTransition(
+//         position: offsetAnimation,
+//         child: child,
+//       );
+//     },
+//   );
+// }
+Route _createRoute(Widget page) {
+  return PageRouteBuilder(
+    transitionDuration: Duration(milliseconds: 30), // Reduced duration for faster animation
+    pageBuilder: (context, animation, secondaryAnimation) => page,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      const begin = Offset(1.0, 0.0); // Start from right to left
+      const end = Offset.zero;
+      const curve = Curves.easeInOutSine;
+
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+      var offsetAnimation = animation.drive(tween);
+
+      return SlideTransition(
+        position: offsetAnimation,
+        child: child,
+      );
+    },
   );
 }
+
+
+  Widget _buildScanToPayButton(BuildContext context) {
+    return SizedBox(
+      width: 270, // Makes the button take the full width of its parent
+      child: ElevatedButton.icon(
+        onPressed: () {
+          Navigator.of(context).push(_createRoute(PayScreen()));
+        },
+        icon: Icon(Icons.qr_code_scanner, color: Colors.green),
+        label: Text(
+          'Scan to pay',
+          style: TextStyle(color: Colors.green),
+        ),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.lightGreen[100],
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12), // Adjust padding
+          alignment: Alignment.center, // Center the content
+        ),
+      ),
+    );
+  }
 
   List<CircleConfig> _buildCircles() {
     return [
