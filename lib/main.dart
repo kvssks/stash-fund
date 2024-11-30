@@ -253,39 +253,100 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   }
 
   void _showNotificationDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Notification'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('Question 1: How was your experience?'),
-              SizedBox(height: 10),
-              Text('Question 2: Any suggestions for improvement?'),
-              SizedBox(height: 10),
-              TextField(
-                decoration: InputDecoration(
-                  labelText: 'Your response',
-                  border: OutlineInputBorder(),
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: Color(0xFF31473A), // Set background color
+        title: Row(
+          children: [
+            Container(
+              width: 40, // Set the desired width
+              height: 40, // Set the desired height
+              child: ClipRect(
+                child: Image.asset(
+                  'assets/images/logo.png',
+                  fit: BoxFit.contain, // Adjust the fit property as needed
                 ),
-                maxLines: 2,
               ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Send'),
+            ),
+            SizedBox(width: 10), // Add spacing between logo and text
+            Text(
+              'Hello User',
+              style: TextStyle(
+                color: Colors.white, // Set text color to white
+                fontFamily: 'Helvetica', // Set font to Helvetica
+              ),
             ),
           ],
-        );
-      },
-    );
-  }
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start, // Align content to the left
+          children: [
+            Text(
+              'How was your experience?\nPlease rate us!\nsmtg',
+              style: TextStyle(
+                color: Colors.white, // Set text color to white
+                fontFamily: 'Helvetica', // Set font to Helvetica
+              ),
+            ),
+            SizedBox(height: 10),
+            Divider(
+              color: Colors.white, // Set divider color to white
+              thickness: 1, // Adjust thickness
+            ),
+            SizedBox(height: 10),
+            Text(
+              'Any suggestions for improvement?\nPlease let us know!\nsmtg',
+              style: TextStyle(
+                color: Colors.white, // Set text color to white
+                fontFamily: 'Helvetica', // Set font to Helvetica
+              ),
+            ),
+            SizedBox(height: 10),
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Your response',
+                labelStyle: TextStyle(
+                  color: Colors.white70, // Set label text color
+                  fontFamily: 'Helvetica', // Set font to Helvetica
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white), // White border
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white), // White border when focused
+                ),
+                border: OutlineInputBorder(),
+              ),
+              style: TextStyle(
+                color: Colors.white, // Text color inside TextField
+                fontFamily: 'Helvetica', // Set font to Helvetica
+              ),
+              maxLines: 2,
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text(
+              'Send',
+              style: TextStyle(
+                color: Colors.white, // Set button text color
+                fontFamily: 'Helvetica', // Set font to Helvetica
+              ),
+            ),
+          ),
+        ],
+      );
+    },
+  );
+}
+
 
   Widget _buildScanToPayButton(BuildContext context) {
     return SizedBox(
