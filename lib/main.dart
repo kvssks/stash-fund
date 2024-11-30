@@ -12,7 +12,6 @@ import 'package:state_secret/screens/needsandwants.dart';
 import 'package:state_secret/screens/savings.dart';
 import 'package:state_secret/screens/manual_entry.dart';
 import 'package:state_secret/screens/Grouplist.dart';
-
 import 'package:state_secret/components/savings_chart.dart';
 import 'package:state_secret/components/navbar.dart';
 import 'package:state_secret/components/AnimatedTextButton.dart';
@@ -96,6 +95,8 @@ class _SavingsChartCardState extends State<SavingsChartCard> {
   }
 }
 
+
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -155,7 +156,38 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 500),
+    )..repeat(reverse: true); // Repeat the animation back and forth
+
+    _animation = Tween<double>(begin: -5.0, end: 5.0).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.elasticIn,
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -167,34 +199,36 @@ class HomeScreen extends StatelessWidget {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 30), // Adjust spacing
-              child: SizedBox(
-                width: 270, // Width for the button
-                child: ElevatedButton.icon(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/pay');
-                  },
-                  icon: Icon(Icons.qr_code_scanner, color: Colors.green),
-                  label: Text(
-                    'Scan to Pay',
-                    style: TextStyle(color: Colors.green, fontSize: 14),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.lightGreen[100],
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 5.0, right: 30), // Adjust the top padding as needed
+                  child: _buildScanToPayButton(context),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 5.0), // Adjust the top padding as needed
+                  child: GestureDetector(
+                    onTap: () {
+                      _showNotificationDialog(context);
+                    },
+                    child: AnimatedBuilder(
+                      animation: _animation,
+                      builder: (context, child) {
+                        return Transform.translate(
+                          offset: Offset(_animation.value, 0),
+                          child: child,
+                        );
+                      },
+                      child: Image.asset(
+                        'assets/images/logo.png',
+                        width: 50, // Adjust the width as needed
+                        height: 50, // Adjust the height as needed
+                      ),
                     ),
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 12), // Adjust padding
                   ),
                 ),
-              ),
-            ),
-            Image.asset(
-              'assets/images/logo.png',
-              width: 50, // Adjust the width as needed
-              height: 50, // Adjust the height as needed
+              ],
             ),
           ],
         ),
@@ -226,7 +260,42 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
-}
+
+  void _showNotificationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Notification'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Question 1: How was your experience?'),
+              SizedBox(height: 10),
+              Text('Question 2: Any suggestions for improvement?'),
+              SizedBox(height: 10),
+              TextField(
+                decoration: InputDecoration(
+                  labelText: 'Your response',
+                  border: OutlineInputBorder(),
+                ),
+                maxLines: 2,
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('Send'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 Widget _buildScanToPayButton(BuildContext context) {
     return SizedBox(
       width: 270, // Makes the button take the full width of its parent
@@ -252,3 +321,4 @@ Widget _buildScanToPayButton(BuildContext context) {
     );
   }
 
+}
