@@ -1,6 +1,43 @@
 import 'package:flutter/material.dart';
 
-class GroupVaultScreen extends StatelessWidget {
+void main() {
+  runApp(MaterialApp(
+    home: GroupVaultScreen(),
+  ));
+}
+
+class GroupVaultScreen extends StatefulWidget {
+  @override
+  _GroupVaultScreenState createState() => _GroupVaultScreenState();
+}
+
+class _GroupVaultScreenState extends State<GroupVaultScreen> with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 500),
+    )..repeat(reverse: true);
+
+    _animation = Tween<double>(begin: -5.0, end: 5.0).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.elasticIn,
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,6 +50,30 @@ class GroupVaultScreen extends StatelessWidget {
             Navigator.pushReplacementNamed(context, '/groupList'); // Navigate back to the previous screen
           },
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: AnimatedBuilder(
+              animation: _animation,
+              builder: (context, child) {
+                return Transform.translate(
+                  offset: Offset(_animation.value, 0),
+                  child: child,
+                );
+              },
+              child: GestureDetector(
+                onTap: () {
+                  _showNotificationDialog(context);
+                },
+                child: Image.asset(
+                  'assets/images/logo.png',
+                  width: 40, // Adjust the width as needed for AppBar
+                  height: 40, // Adjust the height as needed for AppBar
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -114,6 +175,41 @@ class GroupVaultScreen extends StatelessWidget {
       ),
     );
   }
+
+  void _showNotificationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Notification'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Question 1: How was your experience?'),
+              SizedBox(height: 10),
+              Text('Question 2: Any suggestions for improvement?'),
+              SizedBox(height: 10),
+              TextField(
+                decoration: InputDecoration(
+                  labelText: 'Your response',
+                  border: OutlineInputBorder(),
+                ),
+                maxLines: 2,
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('Send'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
 
 class ContributionCard extends StatelessWidget {
@@ -151,10 +247,4 @@ class ContributionCard extends StatelessWidget {
       ),
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: GroupVaultScreen(),
-  ));
 }
