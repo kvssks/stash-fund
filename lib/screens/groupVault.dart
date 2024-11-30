@@ -10,16 +10,28 @@ class GroupVaultScreen extends StatefulWidget {
   _GroupVaultScreenState createState() => _GroupVaultScreenState();
 }
 
-class _GroupVaultScreenState extends State<GroupVaultScreen> {
+class _GroupVaultScreenState extends State<GroupVaultScreen> with SingleTickerProviderStateMixin {
   Map<String, dynamic>? group;
   var grp = GroupVaultService();
   bool isLoading = true;
   final userId = "6749954e5c6f1e3fc91d100f";
   var usr = AuthService();
-
+  late AnimationController _animationController;
+  late Animation<double> _animation;
   @override
   void initState() {
     super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 500),
+    )..repeat(reverse: true);
+
+    _animation = Tween<double>(begin: -5.0, end: 5.0).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.elasticIn,
+      ),
+    );
     fetchGroupData();
   }
 

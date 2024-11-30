@@ -33,7 +33,7 @@ dependencies:
   flutter:
     sdk: flutter
   gradient_circular_progress_indicator: ^0.0.4
-  shared_preferences: ^2.0.17
+
   table_calendar: ^3.0.6
 
 
