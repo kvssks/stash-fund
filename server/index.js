@@ -10,6 +10,7 @@ const goalRoutes = require('./src/routes/goalRoutes');
 const authRoutes = require('./src/routes/authRoutes');
 const personalVaultRoutes = require('./src/routes/personalVaultRoutes');
 const groupVaultRoutes = require('./src/routes/groupVaultRoutes');
+const streakRoutes = require('./src/routes/streakRoutes');
 // Initialize Express App
 const app = express();
 
@@ -24,6 +25,7 @@ app.use('/api/goals', goalRoutes); // Financial goal routes
 app.use("/api/auth", authRoutes);
 app.use('/api/personalVault', personalVaultRoutes);
 app.use('/api/groupVault', groupVaultRoutes);
+app.use('/api/streak', streakRoutes);
 // Database Connection
 mongoose
   .connect(process.env.MONGO_URI)
