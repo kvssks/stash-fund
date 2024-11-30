@@ -1,6 +1,6 @@
 // src/routes/goalRoutes.js
 const express = require('express');
-const { addGoal, getGoals, updateGoal, deleteGoal } = require('../controller/goalController');
+const { addGoal, getGoals, updateGoal, deleteGoal, updateSpentAmount} = require('../controller/goalController');
 
 
 const router = express.Router();
@@ -16,5 +16,8 @@ router.post('/updateGoal', updateGoal);
 
 // Delete a goal
 router.delete('/deleteGoal', deleteGoal);
+
+// spent towards goal
+router.post('/spentGoal', updateSpentAmount);
 
 module.exports = router;

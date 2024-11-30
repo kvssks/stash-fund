@@ -1,25 +1,24 @@
-// src/controllers/goalController.js
 const Goal = require('../models/goal');
 
 // Add a new goal
 const addGoal = async (req, res) => {
   try {
-    const { type, amount ,userid} = req.body;
-  
+    const { type, targetAmount, userId } = req.body;
+
     // Check if the goal already exists for the user
-    const existingGoal = await Goal.findOne({ type, userId: userid });
+    const existingGoal = await Goal.findOne({ type, userId });
     if (existingGoal) {
       return res.status(400).json({ message: 'Goal already exists for this category.' });
     }
 
     const goal = new Goal({
       type,
-      amount,
-      userId: userid,
+      targetAmount,
+      userId,
     });
 
     await goal.save();
-    res.status(201).json(goal);
+    res.status(201).json({ message: 'Goal added successfully', goal });
   } catch (error) {
     res.status(500).json({ message: 'Error adding goal', error: error.message });
   }
@@ -28,32 +27,56 @@ const addGoal = async (req, res) => {
 // Get all goals for the user
 const getGoals = async (req, res) => {
   try {
-    console.log(req.params);
-    const goals = await Goal.find({ userId: req.params.id });
+    const { userId } = req.params;
+    const goals = await Goal.find({ userId });
+
+    if (!goals.length) {
+      return res.status(404).json({ message: 'No goals found for the user.' });
+    }
+
     res.status(200).json(goals);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching goals', error: error.message });
   }
 };
 
-// Update a goal's amount
-const updateGoal = async (req, res) => {
+// Update the spent amount for a goal
+const updateSpentAmount = async (req, res) => {
   try {
-    // const { id } = req.params;
-    // const { amo } = req.body;
-    const { type, amount ,userid} = req.body;
+    const { type, spentAmount, userId } = req.body;
 
     const goal = await Goal.findOneAndUpdate(
-      { type: type, userId: userid },
-      { amount },
+      { type, userId },
+      { $inc: { spentAmount } },
       { new: true } // Return the updated document
     );
 
     if (!goal) {
-      return res.status(404).json({ message: 'Goal not found' });
+      return res.status(404).json({ message: 'Goal not found for this category and user.' });
     }
 
-    res.status(200).json(goal);
+    res.status(200).json({ message: 'Spent amount updated successfully', goal });
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating spent amount', error: error.message });
+  }
+};
+
+// Update a goal's target amount
+const updateGoal = async (req, res) => {
+  try {
+    const { type, targetAmount, userId } = req.body;
+
+    const goal = await Goal.findOneAndUpdate(
+      { type, userId },
+      { targetAmount },
+      { new: true } // Return the updated document
+    );
+
+    if (!goal) {
+      return res.status(404).json({ message: 'Goal not found for this category and user.' });
+    }
+
+    res.status(200).json({ message: 'Target amount updated successfully', goal });
   } catch (error) {
     res.status(500).json({ message: 'Error updating goal', error: error.message });
   }
@@ -62,13 +85,12 @@ const updateGoal = async (req, res) => {
 // Delete a goal
 const deleteGoal = async (req, res) => {
   try {
-    const { userid, type } = req.body; // Extract userId and type from the request body
-    console.log(userid, type);
-    // Find and delete the goal based on userId and type
-    const goal = await Goal.findOneAndDelete({ userId : userid, type: type });
+    const { userId, type } = req.body;
+
+    const goal = await Goal.findOneAndDelete({ userId, type });
 
     if (!goal) {
-      return res.status(404).json({ message: 'Goal not found for the given user and category.' });
+      return res.status(404).json({ message: 'Goal not found for this category and user.' });
     }
 
     res.status(200).json({ message: 'Goal deleted successfully', deletedGoal: goal });
@@ -77,5 +99,4 @@ const deleteGoal = async (req, res) => {
   }
 };
 
-
-module.exports = { addGoal, getGoals, updateGoal, deleteGoal };
+module.exports = { addGoal, getGoals, updateSpentAmount, updateGoal, deleteGoal };

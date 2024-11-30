@@ -18,10 +18,16 @@ const goalSchema = new mongoose.Schema({
     ],
     required: true,
   },
-  amount: {
+  targetAmount: {
     type: Number,
     required: true,
     min: 0,
+  },
+  spentAmount: {
+    type: Number,
+    required: true,
+    min : 0,
+    default: 0,
   },
   userId: {
     type: String,
