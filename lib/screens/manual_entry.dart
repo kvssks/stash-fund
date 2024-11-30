@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:state_secret/screens/set_up_goal_page.dart';
 
 class ManualPage extends StatefulWidget {
   @override
@@ -7,7 +6,7 @@ class ManualPage extends StatefulWidget {
 }
 
 class _ManualPageState extends State<ManualPage> {
-  final Map<String, double> categoryGoals = {};
+  final Map<String, double> manualexpense = {};
 
   final Map<String, IconData> categories = {
     'Dining Out': Icons.restaurant,
@@ -148,9 +147,10 @@ class _ManualPageState extends State<ManualPage> {
               ElevatedButton(
                 onPressed: () {
                   setState(() {
-                    categoryGoals[category] =
+                    manualexpense[category] =
                         double.tryParse(amountController.text) ?? 0.0;
                   });
+                  // print(manualexpense);
                   Navigator.pop(context);
                 },
                 child: Text('Save'),
