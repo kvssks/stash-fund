@@ -8,6 +8,7 @@ const cors = require('cors');
 // const userRoutes = require('./src/routes/userRoutes');
 const goalRoutes = require('./src/routes/goalRoutes');
 const authRoutes = require('./src/routes/authRoutes');
+const budgetFormRoutes = require('./src/routes/budgetFormRoutes');
 const personalVaultRoutes = require('./src/routes/personalVaultRoutes');
 const groupVaultRoutes = require('./src/routes/groupVaultRoutes');
 const streakRoutes = require('./src/routes/streakRoutes');
@@ -23,6 +24,7 @@ app.use(cors()); // Enable Cross-Origin Resource Sharing
 // app.use('/api/users', userRoutes); // User authentication routes
 app.use('/api/goals', goalRoutes); // Financial goal routes
 app.use("/api/auth", authRoutes);
+app.use('/api/budgetForm', budgetFormRoutes);
 app.use('/api/personalVault', personalVaultRoutes);
 app.use('/api/groupVault', groupVaultRoutes);
 app.use('/api/streak', streakRoutes);
