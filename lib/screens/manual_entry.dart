@@ -121,46 +121,60 @@ class _ManualPageState extends State<ManualPage> {
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
-    isScrollControlled: true, // Ensures the bottom sheet can occupy more height
+    isScrollControlled: true, // Allows the bottom sheet to resize when the keyboard is shown
     builder: (BuildContext context) {
-      return FractionallySizedBox(
-        heightFactor: 0.3, // Adjust this to control the height (80% of screen height)
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.max, // Takes up the available height
-            children: [
-              Text(
-                'Enter expense for $category',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      return Padding(
+        padding: EdgeInsets.only(
+          left: 16.0,
+          right: 16.0,
+          bottom: MediaQuery.of(context).viewInsets.bottom, // Dynamic padding to handle keyboard height
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min, // Automatically adjusts to fit content
+          children: [
+            SizedBox(height: 16),
+            Text(
+              'Enter expense for $category',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 20),
+            TextField(
+              controller: amountController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: 'Enter amount',
+                border: OutlineInputBorder(),
               ),
-              SizedBox(height: 20),
-              TextField(
-                controller: amountController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  labelText: 'Enter amount',
-                  border: OutlineInputBorder(),
+            ),
+            SizedBox(height: 25),
+            SizedBox(
+              width: double.infinity, // Makes the button full-width
+              height: 50, // Adjust the height as needed
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(vertical: 12),
                 ),
-              ),
-              SizedBox(height: 25),
-              ElevatedButton(
                 onPressed: () {
-                  setState(() {
-                    manualexpense[category] =
-                        double.tryParse(amountController.text) ?? 0.0;
-                  });
-                  // print(manualexpense);
-                  Navigator.pop(context);
+                  if (amountController.text.isNotEmpty) {
+                    final amount = double.tryParse(amountController.text);
+                    if (amount != null) {
+                      setState(() {
+                        manualexpense[category] = amount;
+                      });
+                      Navigator.pop(context);
+                    }
+                  }
                 },
-                child: Text('Save'),
+                child: Text('Save', style: TextStyle(fontSize: 16)), // Adjust text size
               ),
-            ],
-          ),
+            ),
+            SizedBox(height: 16), // Space at the bottom
+          ],
         ),
       );
     },
   );
 }
+
 
 }
