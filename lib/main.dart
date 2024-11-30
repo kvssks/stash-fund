@@ -16,6 +16,8 @@ import 'package:state_secret/screens/Grouplist.dart';
 import 'package:state_secret/components/savings_chart.dart';
 import 'package:state_secret/components/navbar.dart';
 import 'package:state_secret/components/AnimatedTextButton.dart';
+import 'package:state_secret/components/streak_widget.dart';
+
 
 void main() {
   runApp(
@@ -158,41 +160,64 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.lightBlue[50],
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Column(
+      appBar: AppBar(
+        backgroundColor: Colors.lightBlue[50],
+        elevation: 0,
+        toolbarHeight: 100, // Increase height for better layout
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(height: 16),
-                Padding(
-                  padding: const EdgeInsets.only(top: 65.0, right: 30), // Adjust the top padding as needed
-                  child: _buildScanToPayButton(context),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 65.0), // Adjust the top padding as needed
-                  child: Image.asset(
-                    'assets/images/logo.png',
-                    width: 50, // Adjust the width as needed
-                    height: 50, // Adjust the height as needed
+            Padding(
+              padding: const EdgeInsets.only(right: 30), // Adjust spacing
+              child: SizedBox(
+                width: 270, // Width for the button
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/pay');
+                  },
+                  icon: Icon(Icons.qr_code_scanner, color: Colors.green),
+                  label: Text(
+                    'Scan to Pay',
+                    style: TextStyle(color: Colors.green, fontSize: 14),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.lightGreen[100],
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 12), // Adjust padding
                   ),
                 ),
-              ],
-            ),
-            SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.only(right: 140),
-              child: AnimatedTextButton(
-                text: 'Log Untracked Expenses ->',
-                route: '/manualentry',
               ),
             ),
-            SizedBox(height: 20),
-            SavingsChartCard(),
-            SizedBox(height: 24),
-            _buildPendingPayments(),
+            Image.asset(
+              'assets/images/logo.png',
+              width: 50, // Adjust the width as needed
+              height: 50, // Adjust the height as needed
+            ),
           ],
+        ),
+      ),
+      body: SingleChildScrollView( // Added to make the page scrollable
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Column(
+            children: [
+              SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.only(right: 140),
+                child: AnimatedTextButton(
+                  text: 'Log Untracked Expenses ->',
+                  route: '/manualentry',
+                ),
+              ),
+              SizedBox(height: 20),
+              SavingsChartCard(), // Existing Savings Chart Card
+              SizedBox(height: 20), // Add space between cards
+              StreakWidget(), // New Streak Card
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
@@ -201,8 +226,8 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
-
-  Widget _buildScanToPayButton(BuildContext context) {
+}
+Widget _buildScanToPayButton(BuildContext context) {
     return SizedBox(
       width: 270, // Makes the button take the full width of its parent
       child: ElevatedButton.icon(
@@ -227,42 +252,3 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPendingPayments() {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Mark For Later',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 4),
-            Text(
-              'Pending log entries',
-              style: TextStyle(color: Colors.grey),
-            ),
-            Divider(),
-            _buildPaymentItem('Payment 1'),
-            Divider(),
-            _buildPaymentItem('Payment 2'),
-            Divider(),
-            _buildPaymentItem('Payment 3'),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPaymentItem(String title) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(title),
-        Text('₹'),
-      ],
-    );
-  }
-}
