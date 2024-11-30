@@ -6,11 +6,14 @@ import 'package:state_secret/screens/profile.dart';
 import 'package:state_secret/screens/test.dart';
 import 'package:state_secret/screens/needsandwants.dart';
 import 'package:state_secret/screens/savings.dart';
+import 'package:state_secret/screens/manual_entry.dart';
 
 
 
 import 'package:state_secret/components/savings_chart.dart';
 import 'package:state_secret/components/navbar.dart';
+import 'package:state_secret/components/AnimatedTextButton.dart';
+
 
 void main() {
   runApp(MyApp());
@@ -39,6 +42,12 @@ class _SavingsChartCardState extends State<SavingsChartCard> {
         progress: 0.6,
         gradient: LinearGradient(colors: [Colors.green, Colors.blue]),
         size: 110,
+        stroke: 8,
+      ),
+      CircleConfig(
+        progress: 0.5,
+        gradient: LinearGradient(colors: [Colors.black, const Color.fromARGB(255, 0, 159, 11)]),
+        size: 170,
         stroke: 8,
       ),
     ];
@@ -87,6 +96,8 @@ class MyApp extends StatelessWidget {
       home: HomeScreen(),
       onGenerateRoute: (settings) {
         switch (settings.name) {
+          case'/manualentry':
+            return _createRoute(ManualPage());
           case '/savings':
             return _createRoute(SavingsPage());
           case '/needsandwants':
@@ -157,6 +168,14 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
               ],
+            ),
+            SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.only(right: 140),
+              child: AnimatedTextButton(
+                text: 'Log Untracked Expenses ->',
+                route: '/manualentry',
+              ),
             ),
             SizedBox(height: 20),
             SavingsChartCard(),
