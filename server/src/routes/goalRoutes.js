@@ -9,7 +9,7 @@ const router = express.Router();
 router.post('/addGoal',  addGoal);
 
 // Get all goals for the user
-router.get('/getGoals/:id', getGoals);
+router.get('/getGoals/:userId', getGoals);
 
 // Update a goal
 router.post('/updateGoal', updateGoal);
