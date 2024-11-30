@@ -7,10 +7,11 @@ import 'package:state_secret/screens/categories.dart';
 import 'package:state_secret/screens/form.dart';
 import 'package:state_secret/screens/pay.dart';
 import 'package:state_secret/screens/profile.dart';
-import 'package:state_secret/screens/test.dart';
+import 'package:state_secret/screens/groupVault.dart';
 import 'package:state_secret/screens/needsandwants.dart';
 import 'package:state_secret/screens/savings.dart';
 import 'package:state_secret/screens/manual_entry.dart';
+import 'package:state_secret/screens/Grouplist.dart';
 
 import 'package:state_secret/components/savings_chart.dart';
 import 'package:state_secret/components/navbar.dart';
@@ -101,6 +102,8 @@ class MyApp extends StatelessWidget {
       home: LoginScreen(),
       onGenerateRoute: (settings) {
         switch (settings.name) {
+          case '/groupList':
+            return _createRoute(GroupListScreen());
           case '/manualentry':
             return _createRoute(ManualPage());
           case '/savings':
@@ -113,8 +116,8 @@ class MyApp extends StatelessWidget {
             return _createRoute(CategoriesPage());
           case '/form':
             return _createRoute(BudgetForm());
-          case '/test':
-            return _createRoute(TestScreen());
+          case '/groupVault':
+            return _createRoute(GroupVaultScreen());
           case '/pay':
             return _createRoute(PayScreen());
           case '/profile':

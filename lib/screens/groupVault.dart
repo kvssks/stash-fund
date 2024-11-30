@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:state_secret/components/navbar.dart';
 
-class TestScreen extends StatelessWidget {
+class GroupVaultScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Group Name'),
         centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushReplacementNamed(context, '/groupList'); // Navigate back to the previous screen
+          },
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -107,10 +112,6 @@ class TestScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: CustomBottomNavigationBar(
-        parentContext: context,
-        currentIndex: 1, // 0 for Home
-      ),
     );
   }
 }
@@ -154,6 +155,6 @@ class ContributionCard extends StatelessWidget {
 
 void main() {
   runApp(MaterialApp(
-    home: TestScreen(),
+    home: GroupVaultScreen(),
   ));
 }

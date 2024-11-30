@@ -23,7 +23,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
             Navigator.pushReplacementNamed(parentContext, '/home');
             break;
           case 1:
-            Navigator.pushReplacementNamed(parentContext, '/test');
+            Navigator.pushReplacementNamed(parentContext, '/groupList');
             break;
           case 2:
             Navigator.pushReplacementNamed(parentContext, '/needsandwants');
