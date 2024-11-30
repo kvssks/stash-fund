@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:state_secret/components/auth_provider.dart';
+import 'package:state_secret/screens/login.dart';
+import 'package:state_secret/screens/signup.dart';
 import 'package:state_secret/screens/categories.dart';
 import 'package:state_secret/screens/form.dart';
 import 'package:state_secret/screens/pay.dart';
@@ -8,15 +12,17 @@ import 'package:state_secret/screens/needsandwants.dart';
 import 'package:state_secret/screens/savings.dart';
 import 'package:state_secret/screens/manual_entry.dart';
 
-
-
 import 'package:state_secret/components/savings_chart.dart';
 import 'package:state_secret/components/navbar.dart';
 import 'package:state_secret/components/AnimatedTextButton.dart';
 
-
 void main() {
-  runApp(MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => AuthProvider(),
+      child: MyApp(),
+    ),
+  );
 }
 class SavingsChartCard extends StatefulWidget {
   @override
@@ -87,16 +93,15 @@ class _SavingsChartCardState extends State<SavingsChartCard> {
   }
 }
 
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomeScreen(),
+      home: LoginScreen(),
       onGenerateRoute: (settings) {
         switch (settings.name) {
-          case'/manualentry':
+          case '/manualentry':
             return _createRoute(ManualPage());
           case '/savings':
             return _createRoute(SavingsPage());
@@ -114,6 +119,10 @@ class MyApp extends StatelessWidget {
             return _createRoute(PayScreen());
           case '/profile':
             return _createRoute(ProfileScreen());
+          case '/signup':
+            return _createRoute(SignupScreen());
+          case '/login':
+            return _createRoute(LoginScreen());
           default:
             return null;
         }
@@ -140,7 +149,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -191,51 +199,12 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-// Route _createRoute(Widget page) {
-//   return PageRouteBuilder(
-//     pageBuilder: (context, animation, secondaryAnimation) => page,
-//     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-//       const begin = Offset(1.0, 0.0); // Start from right to left
-//       const end = Offset.zero;
-//       const curve = Curves.easeInOut;
-
-//       var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-//       var offsetAnimation = animation.drive(tween);
-
-//       return SlideTransition(
-//         position: offsetAnimation,
-//         child: child,
-//       );
-//     },
-//   );
-// }
-Route _createRoute(Widget page) {
-  return PageRouteBuilder(
-    transitionDuration: Duration(milliseconds: 30), // Reduced duration for faster animation
-    pageBuilder: (context, animation, secondaryAnimation) => page,
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      const begin = Offset(1.0, 0.0); // Start from right to left
-      const end = Offset.zero;
-      const curve = Curves.easeInOutSine;
-
-      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-      var offsetAnimation = animation.drive(tween);
-
-      return SlideTransition(
-        position: offsetAnimation,
-        child: child,
-      );
-    },
-  );
-}
-
-
   Widget _buildScanToPayButton(BuildContext context) {
     return SizedBox(
       width: 270, // Makes the button take the full width of its parent
       child: ElevatedButton.icon(
         onPressed: () {
-          Navigator.of(context).push(_createRoute(PayScreen()));
+          Navigator.pushNamed(context, '/pay');
         },
         icon: Icon(Icons.qr_code_scanner, color: Colors.green),
         label: Text(
@@ -253,29 +222,6 @@ Route _createRoute(Widget page) {
         ),
       ),
     );
-  }
-
-  List<CircleConfig> _buildCircles() {
-    return [
-      CircleConfig(
-        progress: 0.8,
-        gradient: LinearGradient(colors: [Colors.red, Colors.orange]),
-        size: 150,
-        stroke: 8,
-      ),
-      CircleConfig(
-        progress: 0.7,
-        gradient: LinearGradient(colors: [Colors.purple, Colors.pink]),
-        size: 130,
-        stroke: 8,
-      ),
-      CircleConfig(
-        progress: 0.6,
-        gradient: LinearGradient(colors: [Colors.green, Colors.blue]),
-        size: 110,
-        stroke: 8,
-      ),
-    ];
   }
 
   Widget _buildPendingPayments() {

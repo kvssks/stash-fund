@@ -31,6 +31,7 @@ class _BudgetFormState extends State<BudgetForm> {
       appBar: AppBar(
         title: Text("Budget Form"),
         backgroundColor: Color(0xFFBDE0FE),
+        automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -82,43 +83,22 @@ class _BudgetFormState extends State<BudgetForm> {
                 ),
                 _buildQuestionAndInput("What do you want to include in your budget without stress?", multiline: true),
                 SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: Colors.black,
-                        padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
+                Center(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue[900],
+                      foregroundColor: Colors.white,
+                      padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
                       ),
-                      onPressed: () {
-                        _formKey.currentState!.reset();
-                      },
-                      child: Text("Cancel"),
                     ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue[900],
-                        foregroundColor: Colors.white,
-                        padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text("Form Submitted")),
-                          );
-                        }
-                      },
-                      child: Text("Next"),
-                    ),
-                  ],
-                )
+                    onPressed: () {
+                      Navigator.pushReplacementNamed(context, '/home');
+                    },
+                    child: Text("Submit"),
+                  ),
+                ),
               ],
             ),
           ),
@@ -205,89 +185,87 @@ class _BudgetFormState extends State<BudgetForm> {
       ),
     );
   }
+
   Widget _buildQuestionAndInput(String question, {bool multiline = false}) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 10.0), // Symmetric horizontal padding
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildQuestion(question), // Question above
-        _buildInputField(multiline: multiline), // Input field below
-      ],
-    ),
-  );
-}
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0), // Symmetric horizontal padding
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildQuestion(question), // Question above
+          _buildInputField(multiline: multiline), // Input field below
+        ],
+      ),
+    );
+  }
 
-Widget _buildQuestionAndRadioGroup(String question, List<String> options, Function(String?) onChanged) {
-  return Padding(
-    padding: const EdgeInsets.only(left: 16.0, bottom: 16.0), // Left and bottom padding
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildQuestion(question), // Question above
-        ...options.map((option) {
-          return RadioListTile<String>(
-            title: Text(option),
-            value: option,
-            groupValue: gender,
+  Widget _buildQuestionAndRadioGroup(String question, List<String> options, Function(String?) onChanged) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16.0, bottom: 16.0), // Left and bottom padding
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildQuestion(question), // Question above
+          ...options.map((option) {
+            return RadioListTile<String>(
+              title: Text(option),
+              value: option,
+              groupValue: gender,
+              onChanged: onChanged,
+            );
+          }).toList(), // Radio options below
+        ],
+      ),
+    );
+  }
+
+  Widget _buildQuestionAndCheckboxGroup(String question, List<String> options, List<String> selected) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16.0, bottom: 16.0), // Left and bottom padding
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildQuestion(question), // Question above
+          ...options.map((option) {
+            return CheckboxListTile(
+              title: Text(option),
+              value: selected.contains(option),
+              onChanged: (val) {
+                setState(() {
+                  val! ? selected.add(option) : selected.remove(option);
+                });
+              },
+              controlAffinity: ListTileControlAffinity.leading,
+            );
+          }).toList(), // Checkbox options below
+        ],
+      ),
+    );
+  }
+
+  Widget _buildQuestionAndDropdown(String question, List<String> options, Function(String?) onChanged, String? value) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16.0, bottom: 16.0), // Left and bottom padding
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildQuestion(question), // Question above
+          DropdownButtonFormField<String>(
+            value: value,
             onChanged: onChanged,
-          );
-        }).toList(), // Radio options below
-      ],
-    ),
-  );
-}
-
-Widget _buildQuestionAndCheckboxGroup(String question, List<String> options, List<String> selected) {
-  return Padding(
-    padding: const EdgeInsets.only(left: 16.0, bottom: 16.0), // Left and bottom padding
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildQuestion(question), // Question above
-        ...options.map((option) {
-          return CheckboxListTile(
-            title: Text(option),
-            value: selected.contains(option),
-            onChanged: (val) {
-              setState(() {
-                val! ? selected.add(option) : selected.remove(option);
-              });
-            },
-            controlAffinity: ListTileControlAffinity.leading,
-          );
-        }).toList(), // Checkbox options below
-      ],
-    ),
-  );
-}
-
-Widget _buildQuestionAndDropdown(String question, List<String> options, Function(String?) onChanged, String? value) {
-  return Padding(
-    padding: const EdgeInsets.only(left: 16.0, bottom: 16.0), // Left and bottom padding
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildQuestion(question), // Question above
-        DropdownButtonFormField<String>(
-          value: value,
-          onChanged: onChanged,
-          items: options
-              .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-              .toList(),
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: Colors.white,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
+            items: options
+                .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+                .toList(),
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: Colors.white,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
-          ),
-        ), // Dropdown field below
-      ],
-    ),
-  );
-}
-
-
-
+          ), // Dropdown field below
+        ],
+      ),
+    );
+  }
 }
