@@ -63,7 +63,7 @@ class _StreakWidgetState extends State<StreakWidget> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                'Your Streak Calendar',
+                'Streak Calendar',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 16), // Increased spacing

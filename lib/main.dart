@@ -17,7 +17,6 @@ import 'package:state_secret/components/navbar.dart';
 import 'package:state_secret/components/AnimatedTextButton.dart';
 import 'package:state_secret/components/streak_widget.dart';
 
-
 void main() {
   runApp(
     ChangeNotifierProvider(
@@ -26,6 +25,7 @@ void main() {
     ),
   );
 }
+
 class SavingsChartCard extends StatefulWidget {
   @override
   _SavingsChartCardState createState() => _SavingsChartCardState();
@@ -33,38 +33,39 @@ class SavingsChartCard extends StatefulWidget {
 
 class _SavingsChartCardState extends State<SavingsChartCard> {
   List<CircleConfig> _buildCircles() {
-    return [
-      CircleConfig(
-        progress: 0.8,
-        gradient: LinearGradient(colors: [Colors.red, Colors.orange]),
-        size: 150,
-        stroke: 8,
-      ),
-      CircleConfig(
-        progress: 0.7,
-        gradient: LinearGradient(colors: [Colors.purple, Colors.pink]),
-        size: 130,
-        stroke: 8,
-      ),
-      CircleConfig(
-        progress: 0.6,
-        gradient: LinearGradient(colors: [Colors.green, Colors.blue]),
-        size: 110,
-        stroke: 8,
-      ),
-      CircleConfig(
-        progress: 0.5,
-        gradient: LinearGradient(colors: [Colors.black, const Color.fromARGB(255, 0, 159, 11)]),
-        size: 170,
-        stroke: 8,
-      ),
-    ];
+  return [
+    CircleConfig(
+      progress: 0.8,
+      gradient: LinearGradient(colors: [Colors.red, Colors.orange]),
+      size: 160, // Ensure this matches outer size + stroke
+      stroke: 10, // Stroke matches size difference
+    ),
+    CircleConfig(
+      progress: 0.7,
+      gradient: LinearGradient(colors: [Colors.purple, Colors.pink]),
+      size: 140, // Adjusted to avoid gaps
+      stroke: 10,
+    ),
+    CircleConfig(
+      progress: 0.6,
+      gradient: LinearGradient(colors: [Colors.green, Colors.blue]),
+      size: 120,
+      stroke: 10,
+    ),
+    CircleConfig(
+      progress: 0.5,
+      gradient: LinearGradient(colors: [Colors.black, Color.fromARGB(255, 0, 159, 11)]),
+      size: 100, // Smallest circle
+      stroke: 10,
+    ),
+  ];
+
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 200,
+      height: 250,
       width: double.infinity,
       child: GestureDetector(
         onTap: () {
@@ -73,7 +74,7 @@ class _SavingsChartCardState extends State<SavingsChartCard> {
         child: Card(
           color: Colors.white,
           child: Stack(
-            alignment: Alignment.center, // Aligns text to the center
+            alignment: Alignment.center,
             children: [
               Padding(
                 padding: EdgeInsets.all(18),
@@ -94,8 +95,6 @@ class _SavingsChartCardState extends State<SavingsChartCard> {
     );
   }
 }
-
-
 
 class MyApp extends StatelessWidget {
   @override
@@ -172,7 +171,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     _animationController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 500),
-    )..repeat(reverse: true); // Repeat the animation back and forth
+    )..repeat(reverse: true);
 
     _animation = Tween<double>(begin: -5.0, end: 5.0).animate(
       CurvedAnimation(
@@ -191,49 +190,41 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.lightBlue[50],
+      backgroundColor: Color(0xFFEDF4F2),
       appBar: AppBar(
-        backgroundColor: Colors.lightBlue[50],
+        backgroundColor: Color(0xFFEDF4F2),
         elevation: 0,
-        toolbarHeight: 100, // Increase height for better layout
+        toolbarHeight: 100,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 5.0, right: 30), // Adjust the top padding as needed
-                  child: _buildScanToPayButton(context),
+            Padding(
+              padding: const EdgeInsets.only(top: 5.0, right: 30),
+              child: _buildScanToPayButton(context),
+            ),
+            GestureDetector(
+              onTap: () {
+                _showNotificationDialog(context);
+              },
+              child: AnimatedBuilder(
+                animation: _animation,
+                builder: (context, child) {
+                  return Transform.translate(
+                    offset: Offset(_animation.value, 0),
+                    child: child,
+                  );
+                },
+                child: Image.asset(
+                  'assets/images/logo.png',
+                  width: 50,
+                  height: 50,
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 5.0), // Adjust the top padding as needed
-                  child: GestureDetector(
-                    onTap: () {
-                      _showNotificationDialog(context);
-                    },
-                    child: AnimatedBuilder(
-                      animation: _animation,
-                      builder: (context, child) {
-                        return Transform.translate(
-                          offset: Offset(_animation.value, 0),
-                          child: child,
-                        );
-                      },
-                      child: Image.asset(
-                        'assets/images/logo.png',
-                        width: 50, // Adjust the width as needed
-                        height: 50, // Adjust the height as needed
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
           ],
         ),
       ),
-      body: SingleChildScrollView( // Added to make the page scrollable
+      body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Column(
@@ -247,16 +238,16 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                 ),
               ),
               SizedBox(height: 20),
-              SavingsChartCard(), // Existing Savings Chart Card
-              SizedBox(height: 20), // Add space between cards
-              StreakWidget(), // New Streak Card
+              SavingsChartCard(),
+              SizedBox(height: 20),
+              StreakWidget(),
             ],
           ),
         ),
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
         parentContext: context,
-        currentIndex: 0, // 0 for Home
+        currentIndex: 0,
       ),
     );
   }
@@ -286,7 +277,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               child: Text('Send'),
             ),
@@ -296,17 +287,17 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     );
   }
 
-Widget _buildScanToPayButton(BuildContext context) {
+  Widget _buildScanToPayButton(BuildContext context) {
     return SizedBox(
-      width: 270, // Makes the button take the full width of its parent
+      width: 270,
       child: ElevatedButton.icon(
         onPressed: () {
           Navigator.pushNamed(context, '/pay');
         },
-        icon: Icon(Icons.qr_code_scanner, color: Colors.green),
+        icon: Icon(Icons.qr_code_scanner, color: Color.fromARGB(255, 50, 171, 54)),
         label: Text(
           'Scan to pay',
-          style: TextStyle(color: Colors.green),
+          style: TextStyle(color: Color(0xFF31473A)),
         ),
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.lightGreen[100],
@@ -314,11 +305,10 @@ Widget _buildScanToPayButton(BuildContext context) {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12), // Adjust padding
-          alignment: Alignment.center, // Center the content
+          padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+          alignment: Alignment.center,
         ),
       ),
     );
   }
-
 }
