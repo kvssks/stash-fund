@@ -72,47 +72,108 @@ class _GroupListScreenState extends State<GroupListScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Create New Group Vault'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                decoration: const InputDecoration(hintText: 'Group Name'),
-                onChanged: (value) {
-                  groupName = value;
-                },
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                decoration: const InputDecoration(hintText: 'Purpose'),
-                onChanged: (value) {
-                  groupPurpose = value;
-                },
-              ),
-            ],
+  backgroundColor: const Color(0xFF31473A), // Set background color
+  title: const Text(
+    'Create New Group Vault',
+    style: TextStyle(
+      color: Colors.white, // Set text color to white
+      fontFamily: 'Helvetica', // Set font to Helvetica
+    ),
+  ),
+  content: Column(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      TextField(
+        decoration: const InputDecoration(
+          hintText: 'Group Name',
+          hintStyle: TextStyle(
+            color: Colors.white70, // Hint text color
+            fontFamily: 'Helvetica', // Set font to Helvetica
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text('Cancel'),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.white), // White border
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.white), // White border when focused
+          ),
+        ),
+        style: const TextStyle(
+          color: Colors.white, // Text color inside TextField
+          fontFamily: 'Helvetica', // Set font to Helvetica
+        ),
+        onChanged: (value) {
+          groupName = value;
+        },
+      ),
+      const SizedBox(height: 16),
+      TextField(
+        decoration: const InputDecoration(
+          hintText: 'Purpose',
+          hintStyle: TextStyle(
+            color: Colors.white70, // Hint text color
+            fontFamily: 'Helvetica', // Set font to Helvetica
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.white), // White border
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.white), // White border when focused
+          ),
+        ),
+        style: const TextStyle(
+          color: Colors.white, // Text color inside TextField
+          fontFamily: 'Helvetica', // Set font to Helvetica
+        ),
+        onChanged: (value) {
+          groupPurpose = value;
+        },
+      ),
+    ],
+  ),
+  actions: [
+    TextButton(
+      onPressed: () {
+        Navigator.pop(context);
+      },
+      child: const Text(
+        'Cancel',
+        style: TextStyle(
+          color: Colors.white, // Set button text color
+          fontFamily: 'Helvetica', // Set font to Helvetica
+        ),
+      ),
+    ),
+    TextButton(
+      onPressed: () {
+        Navigator.pop(context);
+        if (groupName.isNotEmpty && groupPurpose.isNotEmpty) {
+          createNewGroupVault(groupName, groupPurpose);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                'Name and Purpose are required!',
+                style: TextStyle(
+                  color: Colors.white, // Set text color to white
+                  fontFamily: 'Helvetica', // Set font to Helvetica
+                ),
+              ),
+              backgroundColor: Color(0xFF31473A), // Match background color
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-                if (groupName.isNotEmpty && groupPurpose.isNotEmpty) {
-                  createNewGroupVault(groupName, groupPurpose);
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Name and Purpose are required!')),
-                  );
-                }
-              },
-              child: const Text('Create'),
-            ),
-          ],
-        );
+          );
+        }
+      },
+      child: const Text(
+        'Create',
+        style: TextStyle(
+          color: Colors.white, // Set button text color
+          fontFamily: 'Helvetica', // Set font to Helvetica
+        ),
+      ),
+    ),
+  ],
+);
+
       },
     );
   }
@@ -120,12 +181,14 @@ class _GroupListScreenState extends State<GroupListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFEDF4F2),
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text(
           'Group List',
           style: TextStyle(color: Colors.black),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Color(0xFFEDF4F2),
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -142,9 +205,9 @@ class _GroupListScreenState extends State<GroupListScreen> {
                         Navigator.pushNamed(context, '/groupVault');
                       },
                       child: Card(
+                        color: Colors.lightGreen[100],
                         margin: const EdgeInsets.symmetric(
                             vertical: 8, horizontal: 16),
-                        elevation: 3,
                         child: ListTile(
                           title: Text(
                             group['name'],
@@ -163,6 +226,7 @@ class _GroupListScreenState extends State<GroupListScreen> {
         currentIndex: 1,
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.lightGreen[100],
         onPressed: showCreateGroupDialog,
         child: const Icon(Icons.add),
       ),

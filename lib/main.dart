@@ -192,6 +192,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     return Scaffold(
       backgroundColor: Color(0xFFEDF4F2),
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Color(0xFFEDF4F2),
         elevation: 0,
         toolbarHeight: 100,

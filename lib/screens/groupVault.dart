@@ -97,8 +97,10 @@ class _GroupVaultScreenState extends State<GroupVaultScreen> with SingleTickerPr
 
     if (group == null) {
       return Scaffold(
+        backgroundColor: Color(0xFFEDF4F2),
         appBar: AppBar(
           title: const Text('Error'),
+          backgroundColor: Color(0xFFEDF4F2),
         ),
         body: const Center(
           child: Text('No group data found.'),
@@ -107,7 +109,9 @@ class _GroupVaultScreenState extends State<GroupVaultScreen> with SingleTickerPr
     }
 
     return Scaffold(
+      backgroundColor: Color(0xFFEDF4F2),
       appBar: AppBar(
+        backgroundColor: Color(0xFFEDF4F2),
         title: Text(group!['name']),
         centerTitle: true,
         leading: IconButton(
@@ -154,7 +158,7 @@ class _GroupVaultScreenState extends State<GroupVaultScreen> with SingleTickerPr
                     height: 150,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.green.withOpacity(0.2),
+                      color: Colors.lightGreen[100],
                     ),
                     child: Center(
                       child: Column(
@@ -185,32 +189,45 @@ class _GroupVaultScreenState extends State<GroupVaultScreen> with SingleTickerPr
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      ElevatedButton.icon(
+                      SizedBox(
+                      width: 175, // Set the desired width
+                      child: ElevatedButton.icon(
                         onPressed: () {
                           showDialog(
                             context: context,
                             builder: (context) => _buildChipInDialog(),
                           );
                         },
-                        icon: const Icon(Icons.add),
-                        label: const Text('Chip In'),
+                        icon: const Icon(Icons.add, color: Colors.white),
+                        label: const Text('Chip In', style: TextStyle(color: Colors.white)),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green,
+                          backgroundColor: Color(0xFF31473A),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10), // Circular edges
+                          ),
                         ),
                       ),
-                      ElevatedButton.icon(
+                    ),
+                    SizedBox(
+                      width: 175, // Set the desired width
+                      child: ElevatedButton.icon(
                         onPressed: () {
                           showDialog(
                             context: context,
                             builder: (context) => _buildChipOutDialog(),
                           );
                         },
-                        icon: const Icon(Icons.remove),
-                        label: const Text('Chip Out'),
+                        icon: const Icon(Icons.remove, color: Colors.white),
+                        label: const Text('Chip Out', style: TextStyle(color: Colors.white)),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
+                          backgroundColor: const Color.fromARGB(255, 143, 10, 0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10), // Circular edges
+                          ),
                         ),
                       ),
+                    ),
+
                     ],
                   ),
                 ],
@@ -258,6 +275,7 @@ class _GroupVaultScreenState extends State<GroupVaultScreen> with SingleTickerPr
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.lightGreen[100],
         onPressed: () {
           showDialog(
             context: context,
@@ -330,35 +348,80 @@ class _GroupVaultScreenState extends State<GroupVaultScreen> with SingleTickerPr
   Widget _buildAddUserDialog() {
     String newUserId = '';
     return AlertDialog(
-      title: const Text('Add User to Vault'),
-      content: TextField(
-        decoration: const InputDecoration(hintText: 'Enter User ID'),
-        onChanged: (value) {
-          newUserId = value;
-        },
+  backgroundColor: const Color(0xFF31473A), // Set background color
+  title: const Text(
+    'Add User to Vault',
+    style: TextStyle(
+      color: Colors.white, // Set text color to white
+      fontFamily: 'Helvetica', // Set font to Helvetica
+    ),
+  ),
+  content: TextField(
+    decoration: const InputDecoration(
+      hintText: 'Enter User ID',
+      hintStyle: TextStyle(
+        color: Colors.white70, // Hint text color
+        fontFamily: 'Helvetica', // Set font to Helvetica
       ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: const Text('Cancel'),
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.white), // White border
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.white), // White border when focused
+      ),
+    ),
+    style: const TextStyle(
+      color: Colors.white, // Text color inside TextField
+      fontFamily: 'Helvetica', // Set font to Helvetica
+    ),
+    onChanged: (value) {
+      newUserId = value;
+    },
+  ),
+  actions: [
+    TextButton(
+      onPressed: () {
+        Navigator.pop(context);
+      },
+      child: const Text(
+        'Cancel',
+        style: TextStyle(
+          color: Colors.white, // Set button text color
+          fontFamily: 'Helvetica', // Set font to Helvetica
         ),
-        TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-            if (newUserId.isNotEmpty) {
-              chipIn(newUserId, 0);
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('User ID cannot be empty!')),
-              );
-            }
-          },
-          child: const Text('Add'),
+      ),
+    ),
+    TextButton(
+      onPressed: () {
+        Navigator.pop(context);
+        if (newUserId.isNotEmpty) {
+          chipIn(newUserId, 0);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                'User ID cannot be empty!',
+                style: TextStyle(
+                  color: Colors.white, // Set text color to white
+                  fontFamily: 'Helvetica', // Set font to Helvetica
+                ),
+              ),
+              backgroundColor: Color(0xFF31473A), // Match background color
+            ),
+          );
+        }
+      },
+      child: const Text(
+        'Add',
+        style: TextStyle(
+          color: Colors.white, // Set button text color
+          fontFamily: 'Helvetica', // Set font to Helvetica
         ),
-      ],
-    );
+      ),
+    ),
+  ],
+);
+
   }
 
   void _showNotificationDialog(BuildContext context) {
